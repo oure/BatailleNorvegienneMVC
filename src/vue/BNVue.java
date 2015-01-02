@@ -179,7 +179,6 @@ public class BNVue extends JFrame {
 		for (Iterator<Joueur> iterator = list.iterator(); iterator.hasNext();) {
 			Joueur joueur = (Joueur) iterator.next();
 			if (joueur != list.getFirst()) {
-				System.out.println(joueur.getNom());
 				tableauDeJoueur[i] = joueur.getNom();
 				i++;
 			}
@@ -217,7 +216,6 @@ public class BNVue extends JFrame {
 
 	public void AfficherCartesCachees(ArrayList<String> NomFichiers) {
 		panelCartesCachees.removeAll();
-		System.out.println(NomFichiers);
 		for (Iterator<String> iterator = NomFichiers.iterator(); iterator
 				.hasNext();) {
 			String string = (String) iterator.next();
@@ -262,11 +260,9 @@ public class BNVue extends JFrame {
 	public BufferedImage getBufferedImageFromImagesFolder(String fileName) {
 		BufferedImage myPicture = null;
 		try {
-			System.out
-					.println("/home/hagard/git/BatailleNorvegienne/images/Cartes/"
-							+ fileName);
+
 			myPicture = ImageIO.read(new File(
-					"/home/hagard/git/BatailleNorvegienne/images/Cartes/"
+					"images/Cartes/"
 							+ fileName));
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -346,6 +342,7 @@ public class BNVue extends JFrame {
 				+ " </font></html>";			
 		labelTour.setText(s);
 		validate();
+		repaint();
 		pack();
 	}
 	public JPanel getPanelPlateauDuJeu(){

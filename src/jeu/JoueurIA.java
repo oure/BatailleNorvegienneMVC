@@ -53,7 +53,7 @@ public class JoueurIA extends Joueur {
 	public void seDefendreContreUnAs(Table table) {
 		int vCarte = strategie.contrerUnAs(this);
 		if (estPossedeDansLamain(vCarte, 1))
-			table.ajouterCartesTable(cartesEnMain.supCarteMain(vCarte, 1));
+			table.ajouterCartesTable(cartesEnMain.supCarteMain(vCarte,null, 1,false));
 		else
 			table.ajouterCartesTable(cartefaceVisibles.supCarteVisible(vCarte,
 					1));
@@ -232,7 +232,7 @@ public class JoueurIA extends Joueur {
 			if (estPossedeDansLamain(valeur, nombreDeCarteAjouer)
 					&& estCeQueLeJoueurPeutJouerDesCartes(valeur,
 							nombreDeCarteAjouer, table)) {
-				hc = cartesEnMain.supCarteMain(valeur, nombreDeCarteAjouer);
+				hc = cartesEnMain.supCarteMain(valeur,null, nombreDeCarteAjouer,false);
 				table.ajouterCartesTable(hc);
 				for (int i = 1; i <= hc.size(); i++) {
 					System.out.println();

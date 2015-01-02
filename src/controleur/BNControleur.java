@@ -10,6 +10,7 @@ import java.util.LinkedList;
 import javax.swing.JButton;
 
 import jeu.Carte;
+import jeu.Carte.Couleur;
 import jeu.CartesEnMain;
 import jeu.CartesFacesCachees;
 import jeu.CartesfacesVisibles;
@@ -26,7 +27,7 @@ public class BNControleur {
 	private BNVue vue;
 	private PartieDeCartes pdc;
 	private int valeur;
-	private int couleur;
+	private Couleur couleur;
 	private int nombreDeCarteAjouer = 1;
 	int tour = 1;
 
@@ -112,19 +113,11 @@ public class BNControleur {
 			pdc.decalerListedesJoueurs(); // Le distributeur joue en dernier
 			System.out.println(pdc.getListeDesJoueurs());
 			vue.MiseEnPlaceDuPlateau();
+			
 			miseAJourDeLaffichage();
 			miseAJourEcouteBoutons();
-			// pdc.getListeDesJoueurs().getLast().getCartesEnMain().getCartemain()
-			// .clear();
-			// pdc.getListeDesJoueurs().getLast()
-			// .ajouterCarteEnMain(new Carte(1, Couleur.Carreau));
-			// pdc.getListeDesJoueurs().getLast()
-			// .ajouterCarteEnMain(new Carte(1, Couleur.Coeur));
-			// pdc.getListeDesJoueurs().getLast()
-			// .ajouterCarteEnMain(new Carte(1, Couleur.Treffle));
 
 			pdc.afficherListeDesJoueurs();
-			// vue.choixListeJoueurLancerTas(pdc.getListeDesJoueurs());
 			vue.changerDePanel(1);
 			synchronized (verrou) {
 				verrou.notify();// je débloque
@@ -140,8 +133,10 @@ public class BNControleur {
 					.println("Vous avez cliquez sur une carte dans votre main !");
 			String nomCarte = getButtonName((JButton) e.getSource());
 			valeur = Integer.parseInt(nomCarte.replaceAll("[^0-9]", ""));
-			String couleur = nomCarte.substring(2, nomCarte.length());
-			System.out.println(valeur + couleur);
+			String scouleur=nomCarte.replaceAll("[^a-zA-Z]", "");
+			scouleur = Character.toString(scouleur.charAt(0)).toUpperCase()+scouleur.substring(1);
+			couleur = Couleur.valueOf(scouleur);
+			//System.out.println(valeur + couleur);
 			synchronized (verrou) {
 				verrou.notify();// je débloque
 			}
@@ -243,7 +238,6 @@ public class BNControleur {
 		int nombreDejoueurQuiPasseLeurTour = 0;
 		tour = 1;
 		// pdc.echangerLesCartes();
-
 		HashSet<Carte> derniereCartesPosees = new HashSet<Carte>();
 		while (cond) {
 			for (Iterator<Joueur> iterator = pdc.getListeDesJoueurs()
@@ -278,9 +272,6 @@ public class BNControleur {
 								pdc.getListeDesJoueurs());
 						nombreDejoueurQuiPasseLeurTour = joueur.PoserUnHuit(
 								derniereCartesPosees, pdc.getTable());
-							pdc.getCartesCacheesJoueurHumain().clear();
-						pdc.getCartesEnMainJoueurHumain().clear();
-						pdc.getCartesVisiblesJoueurHumain().clear();
 					} else {
 						joueur.ajouterCartesEnMain(pdc.getTable()
 								.ramasserLeTas());
@@ -411,7 +402,7 @@ public class BNControleur {
 		System.out.println(j.estPossedeDansLamain(valeur, 1));
 		if (j.estPossedeDansLamain(valeur, 1) && (valeur == 2 || valeur == 1))
 			table.ajouterCartesTable(j.getCartesEnMain()
-					.supCarteMain(valeur, 1));
+					.supCarteMain(valeur, couleur, 1,true));
 		else {
 			System.out
 					.println("Vous ne possedez pas cette carte ou elle ne peut pas contrer un as !");
@@ -502,7 +493,7 @@ public class BNControleur {
 			if (j.estPossedeDansLamain(valeur, nombreDeCarteAjouer)
 					&& j.estCeQueLeJoueurPeutJouerDesCartes(valeur,
 							nombreDeCarteAjouer, table)) {
-				hc = cartesEnMain.supCarteMain(valeur, nombreDeCarteAjouer);
+				hc = cartesEnMain.supCarteMain(valeur,couleur, nombreDeCarteAjouer,true);
 				updateDerniereCarteDeLaTable(table, hc);
 				for (int i = 1; i <= hc.size(); i++) {
 					j.piocher(pioche);
