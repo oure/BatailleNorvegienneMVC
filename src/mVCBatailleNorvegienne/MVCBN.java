@@ -19,6 +19,7 @@ public class MVCBN {
 					e.printStackTrace();
 				}
 			}
+			System.out.println("vdrggd");
 			theContoleur.deroulementDujeu();
 		}
 	}
