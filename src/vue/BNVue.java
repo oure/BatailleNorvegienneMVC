@@ -24,6 +24,7 @@ import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JMenu;
@@ -53,6 +54,11 @@ public class BNVue extends JFrame {
 	private JPanel panelCartesCachees;
 	private JPanel panelCartesVisibles;
 	private JPanel panelCartesEnMain;
+
+	public JPanel getPanelCartesEnMain() {
+		return panelCartesEnMain;
+	}
+
 	private JPanel panelTas;
 	private HashSet<JButton> bCartesEnMain = new HashSet<JButton>();
 	private HashSet<JButton> bCartesVisibles = new HashSet<JButton>();
@@ -99,8 +105,8 @@ public class BNVue extends JFrame {
 		JMenuBar bar = new JMenuBar();
 		JMenu parti = new JMenu("Partie");
 		ImageIcon iconepart = new ImageIcon(new ImageIcon(
-				"images/Cartes/parti.png").getImage().getScaledInstance(35,
-				35, Image.SCALE_DEFAULT));
+				"images/Cartes/parti.png").getImage().getScaledInstance(35, 35,
+				Image.SCALE_DEFAULT));
 		parti.setIcon(iconepart);
 
 		ImageIcon iconexit = new ImageIcon(new ImageIcon(
@@ -559,66 +565,69 @@ public class BNVue extends JFrame {
 	public JPanel getPanelPlateauDuJeu() {
 		return plateauDuJeu;
 	}
-	
-	public void  echanger(){
-		for (Iterator<JButton> iter = bCartesCachees.iterator(); iter.hasNext();) {
-			JButton bou = (JButton) iter.next();
-			
-			bou.addMouseListener(new MouseListener() {
-				public void mouseEntered(MouseEvent e){
-		        }
-				
-				public void mouseExited(MouseEvent e)
-		        {
-		        }
 
-				@Override
-				public void mouseClicked(MouseEvent e) {
-					
+	public void echangeCarte() {
+		JFrame F= new JFrame();
+		JPanel pan = new JPanel();
+		JButton oui = new JButton("oui");
+		JButton non = new JButton("non");
+		JLabel text;
+
+		// setModal(true); // ceci permet de desactiver la fenetre de derriere
+		// tant que le choix n'a pas ete fait
+		text = new JLabel("Voulez vous echanger des cartes ?");
+		pan.add(text);
+		F.setSize(400, 150);
+		pan.add(oui);
+		pan.add(non);
+		F.setContentPane(pan);
+
+		// setDefaultCloseOperation(EXIT_ON_CLOSE);
+		F.pack();
+		F.setVisible(true);
+
+		oui.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent evt) {
+				System.out.println("titi");
+				for (Iterator<JButton> iter = bCartesEnMain.iterator(); iter
+						.hasNext();) {
+					JButton bou = (JButton) iter.next();
+					if (bou.isSelected()) {
+						bou.addMouseListener(new MouseListener() {
+							public void mouseEntered(MouseEvent e) {
+							}
+
+							public void mouseExited(MouseEvent e) {
+							}
+
+							@Override
+							public void mouseClicked(MouseEvent e) {
+
+							}
+
+							@Override
+							public void mousePressed(MouseEvent e) {
+								bou.setBorder(BorderFactory
+										.createLineBorder(Color.GREEN));
+							}
+
+							@Override
+							public void mouseReleased(MouseEvent e) {
+
+							}
+
+						});
+					}
 				}
+			}
+		});
 
-				@Override
-				public void mousePressed(MouseEvent e) {	
-					bou.setBorder(BorderFactory.createLineBorder(Color.GREEN));
-				}
+		non.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				F.dispose();
+			}
 
-				@Override
-				public void mouseReleased(MouseEvent e) {
-
-				}
-			
-			});
-		}
-		
-		for (Iterator<JButton> iter = bCartesVisibles.iterator(); iter.hasNext();) {
-			JButton bou = (JButton) iter.next();
-			
-			bou.addMouseListener(new MouseListener() {
-				public void mouseEntered(MouseEvent e){
-		        }
-				
-				public void mouseExited(MouseEvent e)
-		        {
-		        }
-
-				@Override
-				public void mouseClicked(MouseEvent e) {
-					
-				}
-
-				@Override
-				public void mousePressed(MouseEvent e) {	
-					bou.setBorder(BorderFactory.createLineBorder(Color.GREEN));
-				}
-
-				@Override
-				public void mouseReleased(MouseEvent e) {
-
-				}
-			
-			});
-		}
-		
+		});
 	}
-	
 }

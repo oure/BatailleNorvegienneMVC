@@ -228,13 +228,15 @@ public class PartieDeCartes {
 		return (nb >= b1 && nb <= b2);
 	}
 
+
+	
 	public void echangerLesCartes() {
 		for (int i = 1; i < llJoueur.size(); i++) {
 			((JoueurIA) llJoueur.get(i)).echangerLesCartes();
 		}
 		llJoueur.get(0).afficherLesCartes();
 		System.out.println("Voulez vous echanger des cartes ? N/o");
-		reader = new Scanner(System.in);
+	    reader = new Scanner(System.in);
 		String s = reader.nextLine();
 		if (s.length() == 1 && s.charAt(0) == 'o') {
 			System.out.println("Nombre d'echange que vous voulez faire :");

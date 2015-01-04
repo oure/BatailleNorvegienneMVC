@@ -20,7 +20,6 @@ import jeu.PartieDeCartes;
 import jeu.Pioche;
 import jeu.Table;
 import vue.BNVue;
-import vue.EchangeCarte;
 
 public class BNControleur {
 	public Object verrou = new String("Je suis un verrou");
@@ -31,7 +30,6 @@ public class BNControleur {
 	private Couleur couleur;
 	private int nombreDeCarteAjouer = 1;
 	int tour = 1;
-	private EchangeCarte echcarte;
 
 	public BNControleur(BNVue vue, PartieDeCartes pdc) {
 		this.vue = vue;
@@ -284,8 +282,8 @@ public class BNControleur {
 		boolean passerLeTour = false;
 		int nombreDejoueurQuiPasseLeurTour = 0;
 		tour = 1;
-		echcarte= new EchangeCarte();
-		pdc.echangerLesCartes();
+		vue.echangeCarte();
+		//pdc.echangerLesCartes();
 		HashSet<Carte> derniereCartesPosees = new HashSet<Carte>();
 		while (cond) {
 			for (Iterator<Joueur> iterator = pdc.getListeDesJoueurs()
