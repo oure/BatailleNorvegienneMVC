@@ -4,10 +4,13 @@ import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.Color;
 import java.awt.GridLayout;
+import java.awt.Image;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -34,10 +37,11 @@ import javax.swing.border.EmptyBorder;
 
 import jeu.Joueur;
 import mVCBatailleNorvegienne.MVCBN;
+
 /**
- * La classe vue 
- * Donc c'est toute la vue de l'interface graphique
- * Elle implemente la Classe JFrame afin de pouvoir creer une grande fenetre qui contiendra d'autre composants
+ * La classe vue Donc c'est toute la vue de l'interface graphique Elle
+ * implemente la Classe JFrame afin de pouvoir creer une grande fenetre qui
+ * contiendra d'autre composants
  */
 public class BNVue extends JFrame {
 	private static final long serialVersionUID = 1L;
@@ -88,27 +92,44 @@ public class BNVue extends JFrame {
 		this.getContentPane().add(panel, BorderLayout.CENTER);
 
 		this.setVisible(true);
-		this.setSize(1000, 1000);
+		this.setSize(1500, 1500);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setLocationRelativeTo(null);
 		this.pack();
 		JMenuBar bar = new JMenuBar();
-		JMenu parti= new JMenu("Partie");
-		JMenuItem exit = new JMenuItem("Close");
+		JMenu parti = new JMenu("Partie");
+		ImageIcon iconepart = new ImageIcon(new ImageIcon(
+				"images/Cartes/parti.png").getImage().getScaledInstance(35,
+				35, Image.SCALE_DEFAULT));
+		parti.setIcon(iconepart);
+
+		ImageIcon iconexit = new ImageIcon(new ImageIcon(
+				"images/Cartes/quitter.png").getImage().getScaledInstance(30,
+				30, Image.SCALE_DEFAULT));
+		JMenuItem exit = new JMenuItem("Close", iconexit);
+
 		exit.addActionListener(new ActionListener() {
-         public void actionPerformed(ActionEvent e) {
+			public void actionPerformed(ActionEvent e) {
 				System.exit(0);
 			}
 		});
-	
-		JMenuItem save = new JMenuItem("Sauvegarder");
+
+		ImageIcon iconsave = new ImageIcon(new ImageIcon(
+				"images/Cartes/save.png").getImage().getScaledInstance(30, 30,
+				Image.SCALE_DEFAULT));
+		JMenuItem save = new JMenuItem("Sauvegarder", iconsave);
 		save.addActionListener(new ActionListener() {
 
 			public void actionPerformed(ActionEvent e) {
 				MVCBN.saveJeu("fichier");
-				System.exit(0);			}
+				System.exit(0);
+			}
 		});
-		JMenuItem load = new JMenuItem("Reprendre");	
+
+		ImageIcon iconrepr = new ImageIcon(new ImageIcon(
+				"images/Cartes/resto.png").getImage().getScaledInstance(30, 30,
+				Image.SCALE_DEFAULT));
+		JMenuItem load = new JMenuItem("Reprendre", iconrepr);
 		load.addActionListener(new ActionListener() {
 
 			public void actionPerformed(ActionEvent e) {
@@ -116,19 +137,28 @@ public class BNVue extends JFrame {
 					MVCBN.chargerJeu("fichier");
 				} catch (IOException e1) {
 					e1.printStackTrace();
-				}}
+				}
+			}
 		});
-		
+
 		parti.add(save);
 		parti.add(load);
 		parti.add(exit);
 		bar.add(parti);
-		
-		//ajout de l'onglet
-		JMenu fileMenu = new JMenu("?");
+
+		// ajout de l'onglet
+		JMenu fileMenu = new JMenu();
 		bar.add(fileMenu);
-		JMenuItem newMenuItem = new JMenuItem("Afficher de l'aide",
-				KeyEvent.VK_N);
+		ImageIcon iconaide = new ImageIcon(new ImageIcon(
+				"images/Cartes/Aide.png").getImage().getScaledInstance(30, 30,
+				Image.SCALE_DEFAULT));
+		fileMenu.setIcon(iconaide);
+
+		ImageIcon iconNew = new ImageIcon(new ImageIcon(
+				"images/Cartes/Aide.png").getImage().getScaledInstance(30, 30,
+				Image.SCALE_DEFAULT));
+		JMenuItem newMenuItem = new JMenuItem("Afficher de l'aide", iconNew);
+
 		fileMenu.add(newMenuItem);
 		newMenuItem.addActionListener(new ActionListener() {
 
@@ -137,16 +167,21 @@ public class BNVue extends JFrame {
 			}
 		});
 
+		ImageIcon iconbat = new ImageIcon(new ImageIcon(
+				"images/Cartes/batnor.png").getImage().getScaledInstance(30,
+				30, Image.SCALE_DEFAULT));
 		JMenuItem newMenuItem1 = new JMenuItem(
-				"A propos de Bataille Norvegienne", KeyEvent.VK_N);
+				"A propos de Bataille Norvegienne", iconbat);
 		fileMenu.add(newMenuItem1);
 
 		setJMenuBar(bar);
 	}
+
 	/**
-	 * La methode qui gere la vue graphique du plateau de jeu
-	 * En ajoutant des conteneurs qui vont representer le tas, les cartes visibles, les cartes a face cachees et celle a face visible
-	 *Elle colorie le fond de l'image en vert et borde les conteners 
+	 * La methode qui gere la vue graphique du plateau de jeu En ajoutant des
+	 * conteneurs qui vont representer le tas, les cartes visibles, les cartes a
+	 * face cachees et celle a face visible Elle colorie le fond de l'image en
+	 * vert et borde les conteners
 	 */
 	public void MiseEnPlaceDuPlateau() {
 		plateauDuJeu = new JPanel();
@@ -189,46 +224,65 @@ public class BNVue extends JFrame {
 		panel.add(plateauDuJeu, listContent[1]);
 
 	}
+
 	/**
-	 * Cette methode au bouton  nomme "lancer la partie" d'effectuer une action des qu'on clique dessus
+	 * Cette methode au bouton nomme "lancer la partie" d'effectuer une action
+	 * des qu'on clique dessus
+	 * 
 	 * @param listenForLancerButton
 	 */
 	public void addBNListener(ActionListener listenForLancerButton) {
 		butLauch.addActionListener(listenForLancerButton);
 	}
+
 	/**
 	 * La methode permet au bouton decouter une action
-	 * @param b :le bouton qui attend une action 
-	 * @param listenerPourBoutonCarte l'action a effectuer sur le buton b
+	 * 
+	 * @param b
+	 *            :le bouton qui attend une action
+	 * @param listenerPourBoutonCarte
+	 *            l'action a effectuer sur le buton b
 	 * 
 	 */
 	public void addBoutonCartes(JButton b,
 			ActionListener listenerPourBoutonCarte) {
 		b.addActionListener(listenerPourBoutonCarte);
 	}
+
 	/**
 	 * 
-	 * @param numPanel:le numero du panel a afficher
+	 * @param numPanel
+	 *            :le numero du panel a afficher
 	 */
 	public void changerDePanel(int numPanel) {
 		cl.show(panel, listContent[numPanel]);
 	}
+
 	/**
-	 * Elle premet de recuperer le nombre de joueurs 
-	 * @param a est une chaine de caractere , c'est le nombre entre par le joueur
+	 * Elle premet de recuperer le nombre de joueurs
+	 * 
+	 * @param a
+	 *            est une chaine de caractere , c'est le nombre entre par le
+	 *            joueur
 	 */
 	public void setTexteNbJoueur(String a) {
 		texteNbJoueur.setText(a);
 	}
+
 	/**
-	 *   Elle premet de recuperer le nom du joueur humain 
-	 * @param b est une chaine de caractere , c'est le nombre entre par le joueur
+	 * Elle premet de recuperer le nom du joueur humain
+	 * 
+	 * @param b
+	 *            est une chaine de caractere , c'est le nombre entre par le
+	 *            joueur
 	 */
 	public void setTexteNom(String b) {
 		texteNom.setText(b);
 	}
+
 	/**
 	 * Elle convertit la chaine de caractere entree par le joueur en entier
+	 * 
 	 * @returnle nombre de joueur entre par le joueur humain
 	 */
 	public int getNombreDeJoueur() {
@@ -245,8 +299,10 @@ public class BNVue extends JFrame {
 		}
 		return -1;
 	}
+
 	/**
 	 * Elle recupere le texte entre comme etant le nom du joueur
+	 * 
 	 * @return le texte entre par le joueur
 	 */
 	public String getNomDuJoueur() {
@@ -255,18 +311,25 @@ public class BNVue extends JFrame {
 		else
 			return "";
 	}
+
 	/**
-	 * Cette methode affiche une boite de dialogue 
-	 * @param g  est la chaine de caractere affichee dans la boite de dialogue
+	 * Cette methode affiche une boite de dialogue
+	 * 
+	 * @param g
+	 *            est la chaine de caractere affichee dans la boite de dialogue
 	 */
 	public void creerUneFenetreDinformation(String g) {
 		JOptionPane.showMessageDialog(this, g);
 	}
+
 	/**
-	 * La methode parcourt la liste des joueurs , recupere leur nom et l' ecrit dans un tableau de chaine de caractere
-	 * ces noms sont ecrits dans la boite de dialogue
-	 * et le joueur humain pourra choisir le joueur sur qui envoyer le tas
-	 * @param list la liste de tous les joueurs
+	 * La methode parcourt la liste des joueurs , recupere leur nom et l' ecrit
+	 * dans un tableau de chaine de caractere ces noms sont ecrits dans la boite
+	 * de dialogue et le joueur humain pourra choisir le joueur sur qui envoyer
+	 * le tas
+	 * 
+	 * @param list
+	 *            la liste de tous les joueurs
 	 * @return le nom du joueur dont le joueur humain veut envoyer le tas
 	 */
 	public String choixListeJoueurLancerTas(LinkedList<Joueur> list) {
@@ -283,9 +346,12 @@ public class BNVue extends JFrame {
 				tableauDeJoueur);
 		return a.getnomChoisi();
 	}
+
 	/**
 	 * Cette methode permet de donner des noms aux cartes de face visible
-	 * @param NomFichiers: c'est une liste noms
+	 * 
+	 * @param NomFichiers
+	 *            : c'est une liste noms
 	 */
 	public void AfficheCartesVisibles(ArrayList<String> NomFichiers) {
 		panelCartesVisibles.removeAll();
@@ -299,11 +365,15 @@ public class BNVue extends JFrame {
 		}
 		this.pack();
 	}
+
 	/**
-	 *   Cette methode permet de donner des noms aux cartes en main
+	 * Cette methode permet de donner des noms aux cartes en main
 	 *
-	 * ces cartes seront seront affichees dans l'interface  graphique et seront a face decouvert 
-	 * @param NomFichiers:  c'est une liste noms
+	 * ces cartes seront seront affichees dans l'interface graphique et seront a
+	 * face decouvert
+	 * 
+	 * @param NomFichiers
+	 *            : c'est une liste noms
 	 */
 	public void AfficheCartesEnMain(ArrayList<String> NomFichiers) {
 		panelCartesEnMain.removeAll();
@@ -317,10 +387,13 @@ public class BNVue extends JFrame {
 		}
 		this.pack();
 	}
+
 	/**
-	 * Cette methode permet de donner des noms aux cartes de face cachee
-	 * et elles seront visibles sur l'interface  et seront a face decouvert
-	 * @param NomFichiers:  c'est une liste noms
+	 * Cette methode permet de donner des noms aux cartes de face cachee et
+	 * elles seront visibles sur l'interface et seront a face decouvert
+	 * 
+	 * @param NomFichiers
+	 *            : c'est une liste noms
 	 */
 	public void AfficherCartesCachees(ArrayList<String> NomFichiers) {
 		panelCartesCachees.removeAll();
@@ -333,10 +406,15 @@ public class BNVue extends JFrame {
 			panelCartesCachees.add(b);
 		}
 	}
+
 	/**
-	 * Elle affiche sur l'interface graphique la dernier que carte que vient de jouer chaque joueur
-	 * @param nomDeLaCarte que vient de jouer chaque carte
-	 * @param tour : le tour auquel cette carte a ete posee
+	 * Elle affiche sur l'interface graphique la dernier que carte que vient de
+	 * jouer chaque joueur
+	 * 
+	 * @param nomDeLaCarte
+	 *            que vient de jouer chaque carte
+	 * @param tour
+	 *            : le tour auquel cette carte a ete posee
 	 */
 	public void afficherDerniereCarteDeLatable(String nomDeLaCarte, int tour) {
 		panelTas.removeAll();
@@ -356,51 +434,57 @@ public class BNVue extends JFrame {
 		panel.repaint();
 		pack();
 	}
+
 	/**
 	 * Cette methode permet de creer une carte, lui affecte une valeur et un nom
-	 *la carte est affichee sur l'interface graphique
-	 * @param fileName est le nom de la carte 
+	 * la carte est affichee sur l'interface graphique
+	 * 
+	 * @param fileName
+	 *            est le nom de la carte
 	 * @return
 	 */
 	public JButton getCarteButton(String fileName) {
 		JButton button = new JButton();
 		button.setBorder(BorderFactory.createEmptyBorder());
-		button.setIcon(new ImageIcon(
-				"images/Cartes/"
-						+ fileName));
+		button.setIcon(new ImageIcon("images/Cartes/" + fileName));
 		button.setOpaque(false);
 		button.setContentAreaFilled(false);
 		button.setBorderPainted(false);
 		return button;
 	}
+
 	public BufferedImage getBufferedImageFromImagesFolder(String fileName) {
 		BufferedImage myPicture = null;
 		try {
 
-			myPicture = ImageIO.read(new File(
-					"images/Cartes/"
-							+ fileName));
+			myPicture = ImageIO.read(new File("images/Cartes/" + fileName));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 		return myPicture;
 	}
+
 	/**
 	 * Permet d'afficher les cartes en main
+	 * 
 	 * @return cette collection de cartes
 	 */
 	public HashSet<JButton> getbCartesEnMain() {
 		return bCartesEnMain;
 	}
+
 	/**
 	 * Permet d'afficher les cartes de face visible
+	 * 
 	 * @return cette collection de cartes
 	 */
 	public HashSet<JButton> getbCartesVisibles() {
 		return bCartesVisibles;
 	}
+
 	/**
-	 *  Permet d'afficher les cartes de face cachee
+	 * Permet d'afficher les cartes de face cachee
+	 * 
 	 * @return cette collection de cartes
 	 */
 	public HashSet<JButton> getbCartesCachees() {
@@ -448,12 +532,13 @@ public class BNVue extends JFrame {
 
 	public boolean popupRecommencerUnePartie(String nomGagnant) {
 		Object[] options = { "Oui, super !", "Non merci" };
-		int n = JOptionPane.showOptionDialog(this,
-				"Felicitation : "+nomGagnant+" vous avez gagne la partie !\n\n"+
-				"Voulez vous refaire une partie ? " + "\nLaissez vous tenter ...",
-				"Victoire", JOptionPane.YES_NO_CANCEL_OPTION,
-				JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
-		return (n==0);
+		int n = JOptionPane.showOptionDialog(this, "Felicitation : "
+				+ nomGagnant + " vous avez gagne la partie !\n\n"
+				+ "Voulez vous refaire une partie ? "
+				+ "\nLaissez vous tenter ...", "Victoire",
+				JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE,
+				null, options, options[0]);
+		return (n == 0);
 	}
 
 	public void setLabelTour(int nbTour, String nom,
@@ -464,13 +549,76 @@ public class BNVue extends JFrame {
 		else
 			texte = " : C'est a " + nom + " de jouer !!";
 		String s = "<html><font color='white'>Tour n° " + nbTour + texte
-				+ " </font></html>";			
+				+ " </font></html>";
 		labelTour.setText(s);
 		validate();
 		repaint();
 		pack();
 	}
-	public JPanel getPanelPlateauDuJeu(){
+
+	public JPanel getPanelPlateauDuJeu() {
 		return plateauDuJeu;
 	}
+	
+	public void  echanger(){
+		for (Iterator<JButton> iter = bCartesCachees.iterator(); iter.hasNext();) {
+			JButton bou = (JButton) iter.next();
+			
+			bou.addMouseListener(new MouseListener() {
+				public void mouseEntered(MouseEvent e){
+		        }
+				
+				public void mouseExited(MouseEvent e)
+		        {
+		        }
+
+				@Override
+				public void mouseClicked(MouseEvent e) {
+					
+				}
+
+				@Override
+				public void mousePressed(MouseEvent e) {	
+					bou.setBorder(BorderFactory.createLineBorder(Color.GREEN));
+				}
+
+				@Override
+				public void mouseReleased(MouseEvent e) {
+
+				}
+			
+			});
+		}
+		
+		for (Iterator<JButton> iter = bCartesVisibles.iterator(); iter.hasNext();) {
+			JButton bou = (JButton) iter.next();
+			
+			bou.addMouseListener(new MouseListener() {
+				public void mouseEntered(MouseEvent e){
+		        }
+				
+				public void mouseExited(MouseEvent e)
+		        {
+		        }
+
+				@Override
+				public void mouseClicked(MouseEvent e) {
+					
+				}
+
+				@Override
+				public void mousePressed(MouseEvent e) {	
+					bou.setBorder(BorderFactory.createLineBorder(Color.GREEN));
+				}
+
+				@Override
+				public void mouseReleased(MouseEvent e) {
+
+				}
+			
+			});
+		}
+		
+	}
+	
 }
