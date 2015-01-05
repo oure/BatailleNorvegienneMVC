@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
+import java.util.Scanner;
 
 import javax.swing.JButton;
 
@@ -270,6 +271,25 @@ public class BNControleur {
 		deroulementDujeu();
 	}
 
+	public void echangerLesCartes() {
+		for (int i = 1; i < pdc.getListeDesJoueurs().size(); i++) {
+			((JoueurIA) pdc.getListeDesJoueurs().get(i)).echangerLesCartes();
+		}
+		pdc.getListeDesJoueurs().get(0).afficherLesCartes();
+		 	
+			if (!pdc.controleDesBornes(vue.echangeCarte(), 1, 3)) {
+				System.out.println("Nombre doit etre entre 1 et 3");
+				echangerLesCartes();
+			}
+			for (int i = 0; i < (int)vue.echangeCarte(); i++) {
+				if (!pdc.getListeDesJoueurs().get(0).echangerCartes(
+						pdc.getListeDesJoueurs().get(0).choixDesCartesAEchanger()))
+					i--;
+			}
+		
+	}
+	
+	
 	/**
 	 * methode qui deroule une partie sur le plateau graphique du jeu
 	 */

@@ -565,10 +565,11 @@ public class BNVue extends JFrame {
 	public JPanel getPanelPlateauDuJeu() {
 		return plateauDuJeu;
 	}
-
-	public void echangeCarte() {
-		JFrame F= new JFrame();
-		JPanel pan = new JPanel();
+private	JFrame F= new JFrame();
+private	JPanel pan = new JPanel();
+private JTextField champNom;
+	public String echangeCarte() {
+		
 		JButton oui = new JButton("oui");
 		JButton non = new JButton("non");
 		JLabel text;
@@ -577,7 +578,7 @@ public class BNVue extends JFrame {
 		// tant que le choix n'a pas ete fait
 		text = new JLabel("Voulez vous echanger des cartes ?");
 		pan.add(text);
-		F.setSize(400, 150);
+		F.setSize(400,400);
 		pan.add(oui);
 		pan.add(non);
 		F.setContentPane(pan);
@@ -588,38 +589,48 @@ public class BNVue extends JFrame {
 
 		oui.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent evt) {
-				System.out.println("titi");
-				for (Iterator<JButton> iter = bCartesEnMain.iterator(); iter
-						.hasNext();) {
-					JButton bou = (JButton) iter.next();
-					if (bou.isSelected()) {
-						bou.addMouseListener(new MouseListener() {
-							public void mouseEntered(MouseEvent e) {
-							}
+				JLabel	ec = new JLabel("Nombre d'echange que vous voulez faire :");
+				pan.add(ec);
+				champNom = new JTextField(10);
+			//	F.add(champNom);
+				pan.add(champNom);
 
-							public void mouseExited(MouseEvent e) {
-							}
+			System.out.println("titi");
+			
+//				for (Iterator<JButton> iter = bCartesEnMain.iterator(); iter
+//						.hasNext();) {
+//					JButton bou = (JButton) iter.next();
+//					if (bou.isSelected()) {
+//						bou.addMouseListener(new MouseListener() {
+//						
+//							public void mouseEntered(MouseEvent e) {
+//							}
+//
+//							public void mouseExited(MouseEvent e) {
+//							}
+//
+//							@Override
+//							public void mouseClicked(MouseEvent e) {
+//
+//							}
+//
+//							@Override
+//							public void mousePressed(MouseEvent e) {
+//								bou.setBorder(BorderFactory
+//										.createLineBorder(Color.GREEN));
+//							}
+//
+//							@Override
+//							public void mouseReleased(MouseEvent e) {
+//
+//							}
 
-							@Override
-							public void mouseClicked(MouseEvent e) {
-
-							}
-
-							@Override
-							public void mousePressed(MouseEvent e) {
-								bou.setBorder(BorderFactory
-										.createLineBorder(Color.GREEN));
-							}
-
-							@Override
-							public void mouseReleased(MouseEvent e) {
-
-							}
-
-						});
-					}
+//						});							System.out.println("toto");
+//
+//					}
 				}
-			}
+			//}				
+
 		});
 
 		non.addActionListener(new ActionListener() {
@@ -629,5 +640,6 @@ public class BNVue extends JFrame {
 			}
 
 		});
+		return champNom.getText();
 	}
 }
