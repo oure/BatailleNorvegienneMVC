@@ -1,13 +1,17 @@
 package controleur;
 
+import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Scanner;
 
+import javax.swing.BorderFactory;
 import javax.swing.JButton;
 
 import jeu.Carte;
@@ -21,11 +25,17 @@ import jeu.PartieDeCartes;
 import jeu.Pioche;
 import jeu.Table;
 import vue.BNVue;
+import vue.EchangerCartes;
 
 public class BNControleur {
 	public Object verrou = new String("Je suis un verrou");
 	public Object verrou2 = new String("Je suis un deuxieme verrou");
 	private BNVue vue;
+	
+	public BNVue getVue() {
+		return vue;
+	}
+
 	private PartieDeCartes pdc;
 	private int valeur;
 	private Couleur couleur;
@@ -37,9 +47,10 @@ public class BNControleur {
 		this.pdc = pdc;
 		vue.addBNListener(new BouttonLancerListenner());
 	}
-	
+
 	/**
-	 * Cette methode permet  de ne plus effectuer une action des qu'on clique sur les cartes cartes 
+	 * Cette methode permet de ne plus effectuer une action des qu'on clique sur
+	 * les cartes cartes
 	 */
 
 	public void desalouageListener() {
@@ -59,10 +70,10 @@ public class BNControleur {
 			bouton.removeActionListener(new BoutonCartesCacheesListener());
 		}
 	}
-	
+
 	/**
-	 * Cette methode permet de distribuer  au joueur humain des cartes en main, visible et de face cachee 
-	 * sur le plateau de jeu
+	 * Cette methode permet de distribuer au joueur humain des cartes en main,
+	 * visible et de face cachee sur le plateau de jeu
 	 */
 
 	public void miseAJourEcouteBoutons() {
@@ -100,13 +111,12 @@ public class BNControleur {
 	}
 
 	/**
-	 * Cette classe permet de lancer un plateau de jeu , pret a debuter, des qu'on clique 
-	 * sur le bouton lancer le jeu
+	 * Cette classe permet de lancer un plateau de jeu , pret a debuter, des
+	 * qu'on clique sur le bouton lancer le jeu
 	 *
 	 */
 	class BouttonLancerListenner implements ActionListener {
 		@Override
-		
 		/**
 		 * Cette methode permet de recuperer le nom et le nombre de joueur entres par le joueur humain
 		 * de lancer une partie, distribuer les cartes sur le plateau de jeu
@@ -133,7 +143,7 @@ public class BNControleur {
 			pdc.decalerListedesJoueurs(); // Le distributeur joue en dernier
 			System.out.println(pdc.getListeDesJoueurs());
 			vue.MiseEnPlaceDuPlateau();
-			
+
 			miseAJourDeLaffichage();
 			miseAJourEcouteBoutons();
 
@@ -143,10 +153,12 @@ public class BNControleur {
 				verrou.notify();// je débloque
 				System.out.println("UNLOCK DU GAME");
 			}
+			new EchangerCartes(vue);
+
 		}
+
 	}
 
-	
 	class BouttonCartesEnMainListener implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent e) {
@@ -154,10 +166,12 @@ public class BNControleur {
 					.println("Vous avez cliquez sur une carte dans votre main !");
 			String nomCarte = getButtonName((JButton) e.getSource());
 			valeur = Integer.parseInt(nomCarte.replaceAll("[^0-9]", ""));
-			String scouleur=nomCarte.replaceAll("[^a-zA-Z]", "");
-			scouleur = Character.toString(scouleur.charAt(0)).toUpperCase()+scouleur.substring(1);
+			String scouleur = nomCarte.replaceAll("[^a-zA-Z]", "");
+			scouleur = Character.toString(scouleur.charAt(0)).toUpperCase()
+					+ scouleur.substring(1);
 			couleur = Couleur.valueOf(scouleur);
-			//System.out.println(valeur + couleur);
+			// System.out.println(valeur + couleur);
+
 			synchronized (verrou) {
 				verrou.notify();// je débloque
 			}
@@ -186,10 +200,13 @@ public class BNControleur {
 			valeur = Integer.parseInt(nomCarte.replaceAll("[^0-9]", ""));
 		}
 	}
-/**
- * Cette permet d'avoir le nom des cartes en main que possede le joueur humain
- * @return la liste des noms de ces cartes
- */
+
+	/**
+	 * Cette permet d'avoir le nom des cartes en main que possede le joueur
+	 * humain
+	 * 
+	 * @return la liste des noms de ces cartes
+	 */
 	public ArrayList<String> avoirLaListeDesFichierImagesCartesEnMain() {
 		ArrayList<String> liste = new ArrayList<String>();
 		HashSet<Carte> hc = pdc.getCartesEnMainJoueurHumain();
@@ -202,8 +219,11 @@ public class BNControleur {
 		System.out.println(liste);
 		return liste;
 	}
+
 	/**
-	 * Cette permet d'avoir le nom des cartes face visible que possede le joueur humain
+	 * Cette permet d'avoir le nom des cartes face visible que possede le joueur
+	 * humain
+	 * 
 	 * @return la liste des noms de ces cartes
 	 */
 	public ArrayList<String> avoirLaListeDesFichierImagesCartesVisibles() {
@@ -217,8 +237,11 @@ public class BNControleur {
 		}
 		return liste;
 	}
+
 	/**
-	 * Cette permet d'avoir le nom des cartes de face cachee que possede le joueur humain
+	 * Cette permet d'avoir le nom des cartes de face cachee que possede le
+	 * joueur humain
+	 * 
 	 * @return la liste des noms de ces cartes
 	 */
 
@@ -235,7 +258,8 @@ public class BNControleur {
 	}
 
 	/**
-	 *  Cette methode recupere la derniere carte posee sur la table
+	 * Cette methode recupere la derniere carte posee sur la table
+	 * 
 	 * @return la derniere carte posee sur la table
 	 */
 	public String recupererDerniereCarteDeLaTable() {
@@ -246,9 +270,11 @@ public class BNControleur {
 		String couleur = carte.getCouleur().toString().toLowerCase();
 		return valeur + "_" + couleur + ".png";
 	}
-/**
- * Cette methode permet de mettre a jour l'affichage des cartes afin que le joueur humain ait fini de jouer
- */
+
+	/**
+	 * Cette methode permet de mettre a jour l'affichage des cartes afin que le
+	 * joueur humain ait fini de jouer
+	 */
 	public void miseAJourDeLaffichage() {
 		vue.AfficherCartesCachees(avoirLaListeDesFichierImagesCartesCachees());
 		vue.AfficheCartesVisibles(avoirLaListeDesFichierImagesCartesVisibles());
@@ -256,44 +282,85 @@ public class BNControleur {
 		vue.afficherDerniereCarteDeLatable(recupererDerniereCarteDeLaTable(),
 				tour);
 	}
-/**
- * Permet d'avoir le nom d'une carte
- * @param myButton: le bouton dont on recupere son nom
- * @return le nom de ce bouton
- */
+
+	/**
+	 * Permet d'avoir le nom d'une carte
+	 * 
+	 * @param myButton
+	 *            : le bouton dont on recupere son nom
+	 * @return le nom de ce bouton
+	 */
 	public String getButtonName(JButton myButton) {
 		return myButton.getName().substring(0, myButton.getName().length() - 4);
 	}
-/**
- * Cette methode lance le jeu
- */
+
+	/**
+	 * Cette methode lance le jeu
+	 */
 	public synchronized void lancementDeLaPartie() {
 		deroulementDujeu();
 	}
 
-//	public void echangerLesCartes() {
-//		for (int i = 1; i < pdc.getListeDesJoueurs().size(); i++) {
-//			((JoueurIA) pdc.getListeDesJoueurs().get(i)).echangerLesCartes();
-//		}
-//		pdc.getListeDesJoueurs().get(0).afficherLesCartes();
-//		 	
-//			if (!pdc.controleDesBornes(vue.echangeCarte(), 1, 3)) {
-//				System.out.println("Nombre doit etre entre 1 et 3");
-//				echangerLesCartes();
-//			}
-//			for (int i = 0; i < (int)vue.echangeCarte(); i++) {
-//				if (!pdc.getListeDesJoueurs().get(0).echangerCartes(
-//						pdc.getListeDesJoueurs().get(0).choixDesCartesAEchanger()))
-//					i--;
-//			}
-//		
-//	}
-	
-	
+	public void echangerLesCartes() {
+		desalouageListener();
+		for (Iterator<JButton> iterator = vue.getbCartesEnMain().iterator(); iterator
+				.hasNext();) {
+			JButton m = (JButton) iterator.next();
+
+			m.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					String nomCarte = getButtonName((JButton) e.getSource());
+					valeur = Integer.parseInt(nomCarte.replaceAll("[^0-9]", ""));
+					String scouleur = nomCarte.replaceAll("[^a-zA-Z]", "");
+					scouleur = Character.toString(scouleur.charAt(0))
+							.toUpperCase() + scouleur.substring(1);
+					couleur = Couleur.valueOf(scouleur);
+
+					pdc.getListeDesJoueurs().get(0).getCartesEnMain()
+							.supCarteMain(valeur, couleur, 1, true);
+					System.out.println(pdc.getListeDesJoueurs().get(0)
+							.getCartesEnMain());
+					pdc.getListeDesJoueurs()
+							.get(0)
+							.ajouterCartefacsVisible(new Carte(valeur, couleur));
+
+				}
+			});
+
+		}
+
+		for (Iterator<JButton> iterator = vue.getbCartesVisibles().iterator(); iterator
+				.hasNext();) {
+			JButton v = (JButton) iterator.next();
+			v.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					String nomCarte = getButtonName((JButton) e.getSource());
+					valeur = Integer.parseInt(nomCarte.replaceAll("[^0-9]", ""));
+					String scouleur = nomCarte.replaceAll("[^a-zA-Z]", "");
+					scouleur = Character.toString(scouleur.charAt(0))
+							.toUpperCase() + scouleur.substring(1);
+					couleur = Couleur.valueOf(scouleur);
+
+					pdc.getListeDesJoueurs().get(0).getCartefaceVisibles()
+							.supCarteVisible(valeur, 1);
+					System.out.println(pdc.getListeDesJoueurs().get(0)
+							.getCartefaceVisibles());
+					pdc.getListeDesJoueurs().get(0)
+							.ajouterCarteEnMain(new Carte(valeur, couleur));
+
+				}
+			});
+
+		}
+
+	}
+
 	/**
 	 * methode qui deroule une partie sur le plateau graphique du jeu
 	 */
+
 	public void deroulementDujeu() {
+		echangerLesCartes();
 		Joueur gagnant = null;
 		boolean cond = true;
 		int compteurPourPasserLesTours = 0; // compte le nombre de joueur qui
@@ -302,8 +369,13 @@ public class BNControleur {
 		boolean passerLeTour = false;
 		int nombreDejoueurQuiPasseLeurTour = 0;
 		tour = 1;
-		vue.echangeCarte();
-		//pdc.echangerLesCartes();
+		try {
+			Thread.sleep(25000);
+		} catch (Exception e) {
+		}
+		miseAJourDeLaffichage();
+		miseAJourEcouteBoutons();
+
 		HashSet<Carte> derniereCartesPosees = new HashSet<Carte>();
 		while (cond) {
 			for (Iterator<Joueur> iterator = pdc.getListeDesJoueurs()
@@ -314,6 +386,7 @@ public class BNControleur {
 				} catch (Exception e) {
 				}
 				if (!passerLeTour) {
+
 					vue.setLabelTour(tour, joueur.getNom(),
 							pdc.getListeDesJoueurs());
 					// tour++;
@@ -373,10 +446,11 @@ public class BNControleur {
 		else
 			System.exit(0);
 	}
-/**
- * Cette methode c'est pour redemarrer une partie
- * 
- */
+
+	/**
+	 * Cette methode c'est pour redemarrer une partie
+	 * 
+	 */
 	private void recommencerLaPartie() {
 		vue.setTexteNom("");
 		vue.setTexteNbJoueur("");
@@ -470,8 +544,8 @@ public class BNControleur {
 		}
 		System.out.println(j.estPossedeDansLamain(valeur, 1));
 		if (j.estPossedeDansLamain(valeur, 1) && (valeur == 2 || valeur == 1))
-			table.ajouterCartesTable(j.getCartesEnMain()
-					.supCarteMain(valeur, couleur, 1,true));
+			table.ajouterCartesTable(j.getCartesEnMain().supCarteMain(valeur,
+					couleur, 1, true));
 		else {
 			System.out
 					.println("Vous ne possedez pas cette carte ou elle ne peut pas contrer un as !");
@@ -562,7 +636,8 @@ public class BNControleur {
 			if (j.estPossedeDansLamain(valeur, nombreDeCarteAjouer)
 					&& j.estCeQueLeJoueurPeutJouerDesCartes(valeur,
 							nombreDeCarteAjouer, table)) {
-				hc = cartesEnMain.supCarteMain(valeur,couleur, nombreDeCarteAjouer,true);
+				hc = cartesEnMain.supCarteMain(valeur, couleur,
+						nombreDeCarteAjouer, true);
 				updateDerniereCarteDeLaTable(table, hc);
 				for (int i = 1; i <= hc.size(); i++) {
 					j.piocher(pioche);

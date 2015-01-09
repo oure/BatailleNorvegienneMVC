@@ -37,6 +37,7 @@ import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 
 import jeu.Joueur;
+import jeu.Carte.Couleur;
 import mVCBatailleNorvegienne.MVCBN;
 
 /**
@@ -53,6 +54,11 @@ public class BNVue extends JFrame {
 	private JLabel labelTour = new JLabel("", SwingConstants.CENTER);
 	private JPanel panelCartesCachees;
 	private JPanel panelCartesVisibles;
+	
+	public JPanel getPanelCartesVisibles() {
+		return panelCartesVisibles;
+	}
+
 	private JPanel panelCartesEnMain;
 
 	public JPanel getPanelCartesEnMain() {
@@ -140,6 +146,7 @@ public class BNVue extends JFrame {
 
 			public void actionPerformed(ActionEvent e) {
 				try {
+					dispose();
 					MVCBN.chargerJeu("fichier");
 				} catch (IOException e1) {
 					e1.printStackTrace();
@@ -179,6 +186,13 @@ public class BNVue extends JFrame {
 		JMenuItem newMenuItem1 = new JMenuItem(
 				"A propos de Bataille Norvegienne", iconbat);
 		fileMenu.add(newMenuItem1);
+		newMenuItem1.addActionListener(new ActionListener() {
+
+			public void actionPerformed(ActionEvent e) {
+				// new Url();
+				BatN rf = new BatN();
+			}
+		});
 
 		setJMenuBar(bar);
 	}
@@ -565,81 +579,36 @@ public class BNVue extends JFrame {
 	public JPanel getPanelPlateauDuJeu() {
 		return plateauDuJeu;
 	}
-private	JFrame F= new JFrame();
-private	JPanel pan = new JPanel();
-private JTextField champNom;
-	public String echangeCarte() {
-		
-		JButton oui = new JButton("oui");
-		JButton non = new JButton("non");
-		JLabel text;
 
-		// setModal(true); // ceci permet de desactiver la fenetre de derriere
-		// tant que le choix n'a pas ete fait
-		text = new JLabel("Voulez vous echanger des cartes ?");
-		pan.add(text);
-		F.setSize(400,400);
-		pan.add(oui);
-		pan.add(non);
-		F.setContentPane(pan);
 
-		// setDefaultCloseOperation(EXIT_ON_CLOSE);
-		F.pack();
-		F.setVisible(true);
 
-		oui.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent evt) {
-				JLabel	ec = new JLabel("Nombre d'echange que vous voulez faire :");
-				pan.add(ec);
-				champNom = new JTextField(10);
-			//	F.add(champNom);
-				pan.add(champNom);
-
-			System.out.println("titi");
-			
-//				for (Iterator<JButton> iter = bCartesEnMain.iterator(); iter
-//						.hasNext();) {
-//					JButton bou = (JButton) iter.next();
-//					if (bou.isSelected()) {
-//						bou.addMouseListener(new MouseListener() {
-//						
-//							public void mouseEntered(MouseEvent e) {
-//							}
-//
-//							public void mouseExited(MouseEvent e) {
-//							}
-//
-//							@Override
-//							public void mouseClicked(MouseEvent e) {
-//
-//							}
-//
-//							@Override
-//							public void mousePressed(MouseEvent e) {
-//								bou.setBorder(BorderFactory
-//										.createLineBorder(Color.GREEN));
-//							}
-//
-//							@Override
-//							public void mouseReleased(MouseEvent e) {
-//
-//							}
-
-//						});							System.out.println("toto");
-//
-//					}
-				}
-			//}				
-
-		});
-
-		non.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				F.dispose();
+	
+	public void changeBordureBoutonauClick(JButton b) {
+		b.addMouseListener(new MouseListener() {
+			public void mouseEntered(MouseEvent e) {
 			}
 
+			public void mouseExited(MouseEvent e) {
+			}
+
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				b.setBorder(BorderFactory.createLineBorder(Color.GREEN));
+				repaint();
+				revalidate();
+
+			}
+
+			@Override
+			public void mousePressed(MouseEvent e) {
+			}
+
+			@Override
+			public void mouseReleased(MouseEvent e) {
+				b.setBorder(BorderFactory.createLineBorder(Color.GRAY));
+
+			}
 		});
-		return champNom.getText();
 	}
+
 }
